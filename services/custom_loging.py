@@ -37,12 +37,13 @@ class CustomJSONLog(json_logging.JSONLogFormatter):
         return json.dumps(json_customized_log_object)
 
 
-def get_logger(filename, level=logging.DEBUG):
+def get_logger(filename=None, level=logging.DEBUG):
     json_logging.init_non_web(custom_formatter=CustomJSONLog, enable_json=True)
     logger = logging.getLogger()
     logger.setLevel(level)
     handler_stdout = logging.StreamHandler(sys.stdout)
-    handler_file = logging.FileHandler(filename)
     logger.addHandler(handler_stdout)
-    logger.addHandler(handler_file)
+    if filename:
+        handler_file = logging.FileHandler(filename)
+        logger.addHandler(handler_file)
     return logger
